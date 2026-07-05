@@ -1,0 +1,35 @@
+name: Daily Sites Update
+
+on:
+  schedule:
+    # Runs every day at 06:00 UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:  # Allow manual trigger from GitHub Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run updater script
+        run: python scripts/update_sites.py
+
+      - name: Commit and push updated data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions Bot"
+          git add data/sites.json
+          git diff --staged --quiet || git commit -m "chore: auto-update blocked sites data $(date -u +%Y-%m-%d)"
+          git push

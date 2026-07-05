@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mullvad VPN – Blocked & Broken Sites Tracker</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --red: #f85149;
+      --yellow: #e3b341;
+      --green: #3fb950;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    header h1 { font-size: 1.4rem; color: #fff; }
+    header h1 span { color: var(--accent); }
+    .badge { background: var(--accent); color: #0d1117; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 20px; }
+    .meta { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
+    main { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; }
+    .info-bar { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; }
+    .stat { text-align: center; }
+    .stat .num { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+    .stat .label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .controls { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    input[type=search] { flex: 1; min-width: 200px; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.95rem; outline: none; }
+    input[type=search]:focus { border-color: var(--accent); }
+    select { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.95rem; outline: none; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    thead th { background: #0d1117; padding: 0.85rem 1rem; text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(88,166,255,0.05); }
+    td { padding: 0.85rem 1rem; font-size: 0.9rem; vertical-align: middle; }
+    .domain { font-weight: 600; color: #fff; }
+    .category { background: #21262d; color: var(--muted); font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 20px; }
+    .status-blocked { color: var(--red); font-weight: 600; }
+    .status-partial { color: var(--yellow); font-weight: 600; }
+    .status-captcha { color: var(--yellow); font-weight: 600; }
+    .note { color: var(--muted); font-size: 0.82rem; }
+    .updated { color: var(--muted); font-size: 0.78rem; }
+    #no-results { display: none; text-align: center; padding: 3rem; color: var(--muted); }
+    footer { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer a { color: var(--accent); text-decoration: none; }
+    @media (max-width: 600px) { td, th { padding: 0.6rem 0.5rem; } .controls { flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>🔒 <span>Mullvad VPN</span> — Broken &amp; Blocked Sites</h1>
+      <p class="meta">Automatically updated daily via GitHub Actions</p>
+    </div>
+    <span class="badge" id="update-badge">Loading...</span>
+  </header>
+  <main>
+    <div class="info-bar">
+      <div class="stat"><div class="num" id="total-count">—</div><div class="label">Total Sites</div></div>
+      <div class="stat"><div class="num" id="blocked-count" style="color:var(--red)">—</div><div class="label">Fully Blocked</div></div>
+      <div class="stat"><div class="num" id="partial-count" style="color:var(--yellow)">—</div><div class="label">Partial / Captcha</div></div>
+      <div class="stat"><div class="num" id="last-updated">—</div><div class="label">Last Updated</div></div>
+    </div>
+    <div class="controls">
+      <input type="search" id="search" placeholder="Search domains or notes..." oninput="filterTable()">
+      <select id="cat-filter" onchange="filterTable()">
+        <option value="">All Categories</option>
+      </select>
+      <select id="status-filter" onchange="filterTable()">
+        <option value="">All Statuses</option>
+        <option value="Blocked">Blocked</option>
+        <option value="Partial">Partial</option>
+        <option value="Captcha">Captcha Loop</option>
+      </select>
+    </div>
+    <table id="sites-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Domain</th>
+          <th>Category</th>
+          <th>Status</th>
+          <th>Issue / Notes</th>
+          <th>Last Seen</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+    <div id="no-results">No matching sites found.</div>
+  </main>
+  <footer>
+    Data sourced from <a href="https://mullvad.net" target="_blank">Mullvad community reports</a>, <a href="https://www.reddit.com/r/mullvadvpn" target="_blank">r/mullvadvpn</a> &amp; automated checks.
+    &nbsp;·&nbsp; <a href="https://github.com/welshman/mullvad-blocked-sites" target="_blank">View on GitHub</a>
+    &nbsp;·&nbsp; Not affiliated with Mullvad AB.
+  </footer>
+  <script>
+    let allRows = [];
+    async function loadData() {
+      try {
+        const r = await fetch('data/sites.json?nocache=' + Date.now());
+        const data = await r.json();
+        document.getElementById('update-badge').textContent = 'Updated: ' + data.last_updated;
+        document.getElementById('last-updated').textContent = data.last_updated;
+        const sites = data.sites;
+        document.getElementById('total-count').textContent = sites.length;
+        document.getElementById('blocked-count').textContent = sites.filter(s => s.status === 'Blocked').length;
+        document.getElementById('partial-count').textContent = sites.filter(s => s.status !== 'Blocked').length;
+        const cats = [...new Set(sites.map(s => s.category))].sort();
+        const cf = document.getElementById('cat-filter');
+        cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; cf.appendChild(o); });
+        allRows = sites;
+        renderTable(sites);
+      } catch(e) {
+        document.getElementById('table-body').innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--red);padding:2rem">Failed to load data. Please try again later.</td></tr>';
+        document.getElementById('update-badge').textContent = 'Error';
+      }
+    }
+    function renderTable(sites) {
+      const tbody = document.getElementById('table-body');
+      if (!sites.length) { tbody.innerHTML = ''; document.getElementById('no-results').style.display = 'block'; return; }
+      document.getElementById('no-results').style.display = 'none';
+      tbody.innerHTML = sites.map((s, i) => `
+        <tr>
+          <td style="color:var(--muted)">${i+1}</td>
+          <td><span class="domain">${s.domain}</span></td>
+          <td><span class="category">${s.category}</span></td>
+          <td class="status-${s.status.toLowerCase().replace(' ','-')}">${s.status === 'Captcha' ? '⚠️ Captcha Loop' : s.status === 'Partial' ? '⚠️ Partial' : '🚫 Blocked'}</td>
+          <td class="note">${s.notes}</td>
+          <td class="updated">${s.last_seen}</td>
+        </tr>`).join('');
+    }
+    function filterTable() {
+      const q = document.getElementById('search').value.toLowerCase();
+      const cat = document.getElementById('cat-filter').value;
+      const status = document.getElementById('status-filter').value;
+      const filtered = allRows.filter(s =>
+        (!q || s.domain.toLowerCase().includes(q) || s.notes.toLowerCase().includes(q)) &&
+        (!cat || s.category === cat) &&
+        (!status || s.status === status)
+      );
+      renderTable(filtered);
+    }
+    loadData();
+  </script>
+</body>
+</html>
