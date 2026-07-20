@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-19",
+  "last_updated": "2026-07-20",
   "site_count": 25,
   "sites": [
     {
@@ -7,175 +7,175 @@
       "category": "Streaming",
       "status": "Blocked",
       "notes": "Detects VPN/proxy, returns proxy error",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "hulu.com",
       "category": "Streaming",
       "status": "Blocked",
       "notes": "VPN detection blocks playback",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "disneyplus.com",
       "category": "Streaming",
       "status": "Blocked",
       "notes": "Proxy error on most Mullvad exit nodes",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "bbc.co.uk",
       "category": "Streaming",
       "status": "Blocked",
       "notes": "iPlayer blocks datacenter IPs",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "channel4.com",
       "category": "Streaming",
       "status": "Blocked",
       "notes": "All4 detects Mullvad IPs",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "amazon.com",
       "category": "Shopping",
       "status": "Captcha",
       "notes": "Frequent CAPTCHA and account flags",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "ebay.com",
       "category": "Shopping",
       "status": "Captcha",
       "notes": "Captcha loop on checkout",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "cloudflare.com",
       "category": "Infrastructure",
       "status": "Captcha",
       "notes": "Under Attack mode triggers on many sites",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "google.com",
       "category": "Search",
       "status": "Captcha",
       "notes": "Captcha every few searches",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "bing.com",
       "category": "Search",
       "status": "Captcha",
       "notes": "Intermittent CAPTCHA challenges",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "spotify.com",
       "category": "Music",
       "status": "Partial",
       "notes": "Some features restricted, podcasts may fail",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "paypal.com",
       "category": "Finance",
       "status": "Blocked",
       "notes": "Account security locks triggered",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "banking.lloydsbank.co.uk",
       "category": "Finance",
       "status": "Blocked",
       "notes": "Online banking blocks VPN connections",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "hsbc.co.uk",
       "category": "Finance",
       "status": "Blocked",
       "notes": "Blocks VPN for fraud prevention",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "ticketmaster.com",
       "category": "Tickets",
       "status": "Blocked",
       "notes": "Bot protection blocks Mullvad IPs",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "twitch.tv",
       "category": "Streaming",
       "status": "Partial",
       "notes": "Ad injection workarounds may fail, buffering",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "youtube.com",
       "category": "Streaming",
       "status": "Captcha",
       "notes": "Bot challenges during high traffic",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "reddit.com",
       "category": "Social",
       "status": "Captcha",
       "notes": "Frequent CAPTCHAs on new sessions",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "twitter.com",
       "category": "Social",
       "status": "Partial",
       "notes": "Rate limiting more aggressive via VPN",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "microsoft.com",
       "category": "Software",
       "status": "Partial",
       "notes": "Some downloads and activation checks fail",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "apple.com",
       "category": "Software",
       "status": "Partial",
       "notes": "App Store and iCloud issues reported",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "recaptcha.google.com",
       "category": "Infrastructure",
       "status": "Captcha",
       "notes": "Embedded reCAPTCHA on many sites breaks",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "hbomax.com",
       "category": "Streaming",
       "status": "Blocked",
       "notes": "Max detects and blocks VPN connections",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "peacocktv.com",
       "category": "Streaming",
       "status": "Blocked",
       "notes": "VPN block on all Mullvad exit nodes",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     },
     {
       "domain": "pandora.com",
       "category": "Music",
       "status": "Blocked",
       "notes": "Geo + VPN restricted",
-      "last_seen": "2026-07-19"
+      "last_seen": "2026-07-20"
     }
   ]
 }
